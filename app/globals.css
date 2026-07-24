@@ -1,26 +1,356 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* ===========================
+     Typography
+  =========================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* ===========================
+     Colors
+  =========================== */
+
+  --color-background: #08080a;
+  --color-surface: rgba(18, 18, 22, 0.72);
+  --color-card: rgba(26, 26, 31, 0.82);
+
+  --color-primary: #fafafa;
+  --color-secondary: #a1a1aa;
+
+  --color-border: rgba(255,255,255,.07);
+
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+
+  /* ===========================
+     Radius
+  =========================== */
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* ===========================
+     Shadows
+  =========================== */
+
+  --shadow-card:
+          0 20px 60px rgba(0,0,0,.45);
+
+  --shadow-glow:
+          0 0 0 1px rgba(59,130,246,.08),
+          0 0 50px rgba(37,99,235,.14);
+
+  --shadow-blue:
+          0 0 30px rgba(59,130,246,.22);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ========================================================= */
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+
+  color:var(--color-primary);
+  font-family:var(--font-sans);
+
+  background:
+          radial-gradient(circle at top,#173d72 0%,transparent 32%),
+          radial-gradient(circle at bottom,#132038 0%,transparent 34%),
+          linear-gradient(180deg,#09090b 0%,#070709 100%);
+
+  background-color:#09090b;
+
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ========================================================= */
+
+button{
+  cursor:pointer;
+}
+
+input,
+textarea,
+button{
+  font:inherit;
+}
+
+::selection{
+  background:rgba(59,130,246,.35);
+}
+
+/* ========================================================= */
+
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.12);
+  border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:rgba(255,255,255,.28);
+}
+
+/* ========================================================= */
+
+.container-chat{
+  width:100%;
+  max-width:900px;
+  margin-inline:auto;
+}
+
+/* ========================================================= */
+
+.surface{
+  background:var(--color-surface);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+
+  border:1px solid var(--color-border);
+}
+
+.card-surface{
+  background:var(--color-card);
+
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+
+  border:1px solid var(--color-border);
+
+  box-shadow:var(--shadow-card);
+}
+
+/* ========================================================= */
+
+.glow{
+  transition:
+          border-color .25s,
+          box-shadow .25s,
+          transform .25s;
+}
+
+.glow:hover{
+  border-color:rgba(59,130,246,.22);
+  box-shadow:var(--shadow-glow);
+}
+
+.glow:focus-within{
+  border-color:rgba(59,130,246,.3);
+  box-shadow:0 0 40px rgba(59,130,246,.25);
+}
+
+/* ========================================================= */
+
+.glass{
+  background:rgba(255,255,255,.03);
+
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.glass-dark{
+  background:rgba(12,12,14,.72);
+
+  backdrop-filter:blur(32px);
+  -webkit-backdrop-filter:blur(32px);
+
+  border:1px solid rgba(255,255,255,.05);
+}
+
+/* ========================================================= */
+
+.sidebar{
+  background:
+          linear-gradient(
+                  180deg,
+                  rgba(18,18,22,.92),
+                  rgba(12,12,14,.95)
+          );
+
+  border-right:1px solid rgba(255,255,255,.05);
+
+  backdrop-filter:blur(30px);
+}
+
+.chat-panel{
+  position:relative;
+  background:transparent;
+}
+
+.chat-panel::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+
+  background:
+          radial-gradient(
+                  circle at top,
+                  rgba(59,130,246,.08),
+                  transparent 42%
+          );
+}
+
+/* ========================================================= */
+
+.message-ai{
+  background:
+          linear-gradient(
+                  180deg,
+                  rgba(30,30,35,.92),
+                  rgba(22,22,27,.92)
+          );
+
+  border:1px solid rgba(255,255,255,.05);
+
+  box-shadow:
+          0 12px 40px rgba(0,0,0,.28);
+}
+
+.message-user{
+  background:
+          linear-gradient(
+                  180deg,
+                  #3b82f6,
+                  #2563eb
+          );
+
+  box-shadow:
+          var(--shadow-blue);
+}
+
+/* ========================================================= */
+
+.input-shell{
+  background:
+          rgba(16,16,18,.88);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(24px);
+
+  box-shadow:
+          0 15px 40px rgba(0,0,0,.4);
+}
+
+/* ========================================================= */
+
+.icon-button{
+  transition:
+          transform .2s,
+          background .2s,
+          border-color .2s;
+}
+
+.icon-button:hover{
+  transform:translateY(-1px);
+}
+
+.icon-button:active{
+  transform:scale(.95);
+}
+
+/* ========================================================= */
+
+.fade-up{
+  animation:fadeUp .35s ease;
+}
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(14px);
   }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ========================================================= */
+
+.typing-dot{
+  animation:typing 1.2s infinite;
+}
+
+.typing-dot:nth-child(2){
+  animation-delay:.15s;
+}
+
+.typing-dot:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes typing{
+
+  0%,80%,100%{
+    transform:translateY(0);
+    opacity:.4;
+  }
+
+  40%{
+    transform:translateY(-5px);
+    opacity:1;
+  }
+
+}
+
+/* ========================================================= */
+
+.prose pre{
+  border-radius:18px;
+  overflow:auto;
+}
+
+.prose code{
+  font-size:.9rem;
+}
+
+/* ========================================================= */
+
+@media (max-width:1024px){
+
+  .container-chat{
+    max-width:100%;
+  }
+
+}
+
+@media (max-width:768px){
+
+  body{
+    overflow:auto;
+  }
+
 }

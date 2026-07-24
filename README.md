@@ -1,36 +1,230 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+AI Chatbot
 
-## Getting Started
+✓ ChatGPT-style interface
+✓ Streaming responses
+✓ Markdown support
+✓ Code syntax highlighting
+✓ Copy messages
+✓ Auto scroll
+✓ AI typing animation
+✓ Responsive
+✓ Dark mode
+✓ Chat history (localStorage)
+✓ Clear chat
+✓ Mobile friendly
+✓ Loading states
+✓ Error handling
+✓ Production ready
 
-First, run the development server:
+lib/
+├── storage.ts
+├── chat-history.ts
+├── markdown.ts
+├── prompts.ts
+├── models.ts
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+hooks/
+├── use-chat-history.ts
+├── use-chat-search.ts
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+components/
+├── chat/
+│   ├── conversation-title.tsx
+│   ├── message-actions.tsx
+│   ├── regenerate-button.tsx
+│   ├── stop-generating.tsx
+│   ├── scroll-to-bottom.tsx
+│   ├── suggested-prompts.tsx
+│   └── welcome-screen.tsx
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+sidebar/
+├── rename-dialog.tsx
+├── delete-dialog.tsx
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+providers/
+├── theme-provider.tsx
 
-## Learn More
+stores/
+├── settings-store.ts
 
-To learn more about Next.js, take a look at the following resources:
+app/
+├── settings/
+│   └── page.tsx
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+components/
+├── core/
+│   ├── button.tsx
+│   ├── card.tsx
+│   ├── textarea.tsx
+│   ├── badge.tsx
+│   ├── spinner.tsx
+│   ├── tooltip.tsx
+│   └── divider.tsx
+│
+├── markdown/
+│   ├── markdown.tsx
+│   ├── code-block.tsx
+│   ├── copy-button.tsx
+│   ├── table.tsx
+│   └── syntax-theme.ts
+│
+├── sidebar/
+│   ├── search.tsx
+│   ├── conversation-item.tsx
+│   ├── profile.tsx
+│   └── mobile-sidebar.tsx
+│
+├── effects/
+│   ├── background-glow.tsx
+│   ├── spotlight.tsx
+│   └── grid.tsx
+│
+├── providers/
+│   └── chat-provider.tsx
+│
+├── hooks/
+│   ├── use-auto-scroll.ts
+│   ├── use-local-storage.ts
+│   └── use-mobile.ts
+│
+├── services/
+│   └── chat.ts
+│
+└── stores/
+└── chat-store.ts
+
+
+app/
+│
+├── (chat)/
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── globals.css
+└── layout.tsx
+
+components/
+│
+├── chat/
+│   ├── logo.tsx
+│   ├── app-sidebar.tsx
+│   ├── header.tsx
+│   ├── empty-state.tsx
+│   ├── suggestion-card.tsx
+│   ├── chat-input.tsx
+│   ├── message.tsx
+│   └── typing.tsx
+│
+├── providers/
+│   └── theme-provider.tsx
+│
+└── ui/
+
+hooks/
+
+lib/
+│
+├── mock-data.ts
+├── constants.ts
+└── utils.ts
+
+types/
+
+public/
+│
+├── logo.png
+├── logo.svg
+└── favicon.ico
+
+lib/
+├── storage.ts
+├── chat-history.ts
+├── markdown.ts
+├── prompts.ts
+├── models.ts
+
+hooks/
+├── use-chat-history.ts
+├── use-chat-search.ts
+
+components/
+├── chat/
+│   ├── conversation-title.tsx
+│   ├── message-actions.tsx
+│   ├── regenerate-button.tsx
+│   ├── stop-generating.tsx
+│   ├── scroll-to-bottom.tsx
+│   ├── suggested-prompts.tsx
+│   └── welcome-screen.tsx
+
+sidebar/
+├── rename-dialog.tsx
+├── delete-dialog.tsx
+
+providers/
+├── theme-provider.tsx
+
+stores/
+├── settings-store.ts
+
+app/
+├── settings/
+│   └── page.tsx
+
+
+
+
+
+
+
+ai-chatbot/
+│
+├── app/
+│   ├── api/
+│   │   └── chat/
+│   │       └── route.ts
+│   │
+│   ├── chat/
+│   │   └── page.tsx
+│   │
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── components/
+│   ├── chat/
+│   │   ├── Chat.tsx
+│   │   ├── ChatInput.tsx
+│   │   ├── ChatMessage.tsx
+│   │   ├── MessageList.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── Header.tsx
+│   │
+│   ├── ui/
+│   └── ThemeToggle.tsx
+│
+├── hooks/
+│   └── useAutoScroll.ts
+│
+├── lib/
+│   ├── groq.ts
+│   ├── markdown.ts
+│   └── utils.ts
+│
+├── types/
+│   └── chat.ts
+│
+├── public/
+│
+├── .env.local
+│
+├── package.json
+│
+└── README.md
