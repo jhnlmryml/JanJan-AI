@@ -18,7 +18,7 @@ export default function Chat() {
     });
 
     return (
-        <section className="chat-panel flex h-full flex-1 flex-col">
+        <section className="chat-panel flex max-h-screen h-screen flex-1 flex-col">
             <Conversation
                 messages={messages}
                 status={status}
@@ -26,7 +26,8 @@ export default function Chat() {
 
             <ChatInput
                 status={status}
-                sendMessage={sendMessage}
+                sendMessageAction={sendMessage}
+                hasMessages={messages.length > 0}
             />
         </section>
     );

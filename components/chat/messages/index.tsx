@@ -12,14 +12,10 @@ type MessagesProps = {
     status: ChatStatus;
 };
 
-export default function Messages({
-                                     messages,
-                                     status,
-                                 }: MessagesProps) {
+export default function Messages({ messages, status }: MessagesProps) {
     return (
         <ChatScroll>
-            <div className="space-y-8 pb-10">
-
+            <div className="flex flex-col space-y-6">
                 {messages.map((message) => {
                     const content = message.parts
                         .filter((part) => part.type === "text")
@@ -41,11 +37,9 @@ export default function Messages({
                     );
                 })}
 
-                {(status === "submitted" ||
-                    status === "streaming") && (
+                {(status === "submitted" || status === "streaming") && (
                     <TypingIndicator />
                 )}
-
             </div>
         </ChatScroll>
     );

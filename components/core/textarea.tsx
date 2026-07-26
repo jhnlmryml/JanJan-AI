@@ -1,70 +1,59 @@
 "use client";
 
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
-export interface ChatTextareaProps
-    extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export type ChatTextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-const ChatTextarea = React.forwardRef<
-    HTMLTextAreaElement,
-    ChatTextareaProps
->(({ className, onInput, ...props }, ref) => {
-    function handleAutoResize(
-        e: React.FormEvent<HTMLTextAreaElement>
-    ) {
-        const textarea = e.currentTarget;
+const MAX_HEIGHT = 180;
 
-        textarea.style.height = "0px";
+const ChatTextarea = React.forwardRef<HTMLTextAreaElement, ChatTextareaProps>(
+    ({ className, value, onChange, ...props }, forwardedRef) => {
+        const internalRef = React.useRef<HTMLTextAreaElement>(null);
 
-        textarea.style.height = `${Math.min(
-            textarea.scrollHeight,
-            220
-        )}px`;
+        // Merge internal and external refs
+        const setRefs = React.useCallback(
+            (node: HTMLTextAreaElement | null) => {
+                internalRef.current = node;
+                if (typeof forwardedRef === "function") {
+                    forwardedRef(node);
+                } else if (forwardedRef) {
+                    (forwardedRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
+                }
+            },
+            [forwardedRef]
+        );
 
-        onInput?.(e);
+        // Auto-resize height without showing vertical scrollbar
+        React.useLayoutEffect(() => {
+            const textarea = internalRef.current;
+            if (!textarea) return;
+
+            textarea.style.height = "auto";
+            textarea.style.height = `${Math.min(textarea.scrollHeight, MAX_HEIGHT)}px`;
+        }, [value]);
+
+        return (
+            <textarea
+                {...props}
+                ref={setRefs}
+                value={value}
+                onChange={onChange}
+                rows={1}
+                className={cn(
+                    `
+                        w-full border-none bg-transparent text-[15px] leading-relaxed 
+                        text-slate-100 placeholder:text-slate-400 outline-none ring-0 
+                        focus:outline-none focus:ring-0 shadow-none
+                        scrollbar-none overflow-y-auto
+                        disabled:cursor-not-allowed disabled:opacity-50
+                    `,
+                    className
+                )}
+            />
+        );
     }
-
-    return (
-        <textarea
-            ref={ref}
-            rows={1}
-            onInput={handleAutoResize}
-            className={cn(
-                `
-          w-full
-          resize-none
-          overflow-y-auto
-          bg-transparent
-
-          px-0
-          py-0
-
-          text-[15px]
-          leading-7
-          text-primary
-
-          placeholder:text-secondary
-
-          outline-none
-          border-none
-          shadow-none
-
-          focus:outline-none
-          focus:ring-0
-
-          disabled:cursor-not-allowed
-          disabled:opacity-60
-
-          scrollbar-thin
-        `,
-                className
-            )}
-            {...props}
-        />
-    );
-});
+);
 
 ChatTextarea.displayName = "ChatTextarea";
 

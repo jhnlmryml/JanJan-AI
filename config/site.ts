@@ -1,20 +1,17 @@
 export const APP = {
     name: "Janjan",
-
+    tagline: "Next-Gen Intelligence",
     description:
-        "Your intelligent AI assistant",
+        "Your intelligent AI assistant powered by high-speed inference. Ask questions, write code, analyze data, or brainstorm ideas instantly.",
 
     creator: "Jhon",
-
     version: "1.0.0",
 
     model: "Llama 3.3 70B",
-
     provider: "Groq",
 
-    website: "",
-
-    github: "",
+    website: "https://janjan.ai",
+    github: "https://github.com/jhon/janjan",
 
     logo: "/logo.svg",
 
@@ -31,15 +28,14 @@ export const APP = {
     chat: {
         maxInputLength: 10000,
         placeholder: "Ask Janjan anything...",
-        welcome:
-            "How can I help you today?",
+        welcome: "How can I help you today?",
     },
 
     theme: {
         accent: "#3B82F6",
-        background: "#09090B",
-        surface: "#111113",
-        card: "#18181B",
+        background: "#05070A",
+        surface: "#0D1117",
+        card: "#161B22",
     },
 
     animation: {

@@ -1,54 +1,21 @@
 "use client";
 
-import { User } from "lucide-react";
+import { memo } from "react";
 
 type UserMessageProps = {
     content: string;
 };
 
-export default function UserMessage({
-                                        content,
-                                    }: UserMessageProps) {
+function UserMessage({ content }: UserMessageProps) {
     return (
         <div className="fade-up flex justify-end">
-            <div className="flex max-w-4xl items-end gap-4">
-
-                <article
-                    className="
-            message-user
-            rounded-[28px]
-            px-6
-            py-5
-            text-[15px]
-            leading-7
-            text-white
-            shadow-lg
-        "
-                >
+            <div className="flex max-w-[85%] sm:max-w-[75%] items-end gap-3">
+                <article className="message-user rounded-2xl rounded-br-md px-4.5 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-[15px] font-normal leading-relaxed text-white shadow-lg shadow-blue-600/20 break-words">
                     {content}
                 </article>
-
-                <div
-                    className="
-            glass
-            flex
-            h-12
-            w-12
-            shrink-0
-            items-center
-            justify-center
-            rounded-2xl
-            border
-            border-white/10
-        "
-                >
-                    <User
-                        size={18}
-                        className="text-white"
-                    />
-                </div>
-
             </div>
         </div>
     );
 }
+
+export default memo(UserMessage);
