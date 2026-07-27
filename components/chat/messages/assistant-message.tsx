@@ -14,7 +14,6 @@ type AssistantMessageProps = {
     content: string;
 };
 
-// Type for custom code component props from react-markdown
 type ExtraProps = {
     inline?: boolean;
     className?: string;
@@ -25,7 +24,6 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
     const [copiedText, setCopiedText] = useState<string | null>(null);
     const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
 
-    // Fix 3: Handle promise returned by writeText
     const handleCopy = async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -60,7 +58,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                         )}
                     </div>
 
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 font-sans tracking-tight">
                         {APP.name}
                         <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 text-[10px] font-medium text-blue-400">
                             AI
@@ -69,21 +67,130 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                 </div>
 
                 {/* Formatted Markdown Content */}
-                <div className="
-                    prose prose-invert max-w-none text-xs sm:text-sm leading-relaxed text-slate-200
-                    prose-p:my-2 prose-p:leading-relaxed
-                    prose-headings:my-3 prose-headings:font-semibold prose-headings:text-slate-100
-                    prose-ul:my-2 prose-ul:list-disc prose-ul:pl-4
-                    prose-ol:my-2 prose-ol:list-decimal prose-ol:pl-4
-                    prose-li:my-0.5
-                    prose-blockquote:border-l-2 prose-blockquote:border-blue-500/50 prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:text-slate-400
-                    prose-strong:font-semibold prose-strong:text-slate-100
-                    prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0
-                ">
+                <div className="markdown-content font-sans text-xs sm:text-sm leading-relaxed text-slate-200">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
-                            // Fix 1 & 2: Omit 'node' to fix unused var, strongly type props instead of 'any'
+                            p({ children }) {
+                                return (
+                                    <p className="mb-3 leading-relaxed last:mb-0 whitespace-pre-line">
+                                        {children}
+                                    </p>
+                                );
+                            },
+                            h1({ children }) {
+                                return (
+                                    <h1 className="mt-5 mb-2.5 text-lg sm:text-xl font-bold tracking-tight text-slate-100">
+                                        {children}
+                                    </h1>
+                                );
+                            },
+                            h2({ children }) {
+                                return (
+                                    <h2 className="mt-4 mb-2 text-base sm:text-lg font-bold tracking-tight text-slate-100">
+                                        {children}
+                                    </h2>
+                                );
+                            },
+                            h3({ children }) {
+                                return (
+                                    <h3 className="mt-3.5 mb-1.5 text-sm sm:text-base font-semibold text-slate-100">
+                                        {children}
+                                    </h3>
+                                );
+                            },
+                            h4({ children }) {
+                                return (
+                                    <h4 className="mt-3 mb-1 text-xs sm:text-sm font-semibold text-slate-200">
+                                        {children}
+                                    </h4>
+                                );
+                            },
+                            ul({ children }) {
+                                return (
+                                    <ul className="my-2.5 ml-4 list-disc space-y-1 pl-2 text-slate-200">
+                                        {children}
+                                    </ul>
+                                );
+                            },
+                            ol({ children }) {
+                                return (
+                                    <ol className="my-2.5 ml-4 list-decimal space-y-1 pl-2 text-slate-200">
+                                        {children}
+                                    </ol>
+                                );
+                            },
+                            li({ children }) {
+                                return (
+                                    <li className="pl-1 leading-relaxed">
+                                        {children}
+                                    </li>
+                                );
+                            },
+                            blockquote({ children }) {
+                                return (
+                                    <blockquote className="my-3 border-l-3 border-blue-500/60 bg-blue-500/5 py-2 pl-4 pr-3 italic text-slate-300 rounded-r-lg">
+                                        {children}
+                                    </blockquote>
+                                );
+                            },
+                            hr() {
+                                return <hr className="my-4 border-white/10" />;
+                            },
+                            strong({ children }) {
+                                return (
+                                    <strong className="font-semibold text-slate-100">
+                                        {children}
+                                    </strong>
+                                );
+                            },
+                            em({ children }) {
+                                return (
+                                    <em className="italic text-slate-200">
+                                        {children}
+                                    </em>
+                                );
+                            },
+                            table({ children }) {
+                                return (
+                                    <div className="my-4 overflow-x-auto rounded-xl border border-white/10 bg-[#0d0d12]">
+                                        <table className="w-full text-left text-xs border-collapse">
+                                            {children}
+                                        </table>
+                                    </div>
+                                );
+                            },
+                            thead({ children }) {
+                                return (
+                                    <thead className="bg-white/5 border-b border-white/10 text-slate-200">
+                                    {children}
+                                    </thead>
+                                );
+                            },
+                            tbody({ children }) {
+                                return (
+                                    <tbody className="divide-y divide-white/5">
+                                    {children}
+                                    </tbody>
+                                );
+                            },
+                            tr({ children }) {
+                                return <tr>{children}</tr>;
+                            },
+                            th({ children }) {
+                                return (
+                                    <th className="px-3.5 py-2.5 font-semibold text-slate-200">
+                                        {children}
+                                    </th>
+                                );
+                            },
+                            td({ children }) {
+                                return (
+                                    <td className="px-3.5 py-2.5 text-slate-300">
+                                        {children}
+                                    </td>
+                                );
+                            },
                             code({ inline, className, children, ...props }: ExtraProps & React.HTMLAttributes<HTMLElement>) {
                                 const match = /language-(\w+)/.exec(className || "");
                                 const codeString = String(children).replace(/\n$/, "");
@@ -94,7 +201,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
 
                                     return (
                                         <div className="relative my-4 flex flex-col rounded-xl border border-white/10 bg-[#0d0d12] shadow-xl">
-                                            {/* Fixed Sticky Header */}
+                                            {/* Header */}
                                             <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between rounded-t-xl border-b border-white/10 bg-[#121218] px-3.5 py-2 text-xs font-mono text-slate-400">
                                                 <span className="text-[11px] font-semibold tracking-wide uppercase text-blue-400">
                                                     {language}
@@ -118,7 +225,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                                                 </button>
                                             </div>
 
-                                            {/* Scrollable Code Area */}
+                                            {/* Code Block */}
                                             <div className="max-h-[450px] overflow-auto text-xs font-mono leading-relaxed no-scrollbar">
                                                 <SyntaxHighlighter
                                                     language={language}
@@ -132,7 +239,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                                                     }}
                                                     codeTagProps={{
                                                         style: {
-                                                            fontFamily: "var(--font-mono, monospace)",
+                                                            fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                                                         },
                                                     }}
                                                 >
@@ -146,6 +253,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                                 return (
                                     <code
                                         className="rounded-md border border-white/10 bg-white/[0.08] px-1.5 py-0.5 text-[12px] font-mono font-medium text-blue-300"
+                                        style={{ fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}
                                         {...props}
                                     >
                                         {children}

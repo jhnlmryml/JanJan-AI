@@ -10,9 +10,6 @@ export const APP = {
     model: "Llama 3.3 70B",
     provider: "Groq",
 
-    website: "https://janjan.ai",
-    github: "https://github.com/jhon/janjan",
-
     logo: "/logo.svg",
 
     api: {
@@ -22,6 +19,7 @@ export const APP = {
     ui: {
         maxWidth: 900,
         sidebarWidth: 320,
+        collapsedWidth: 72,
         mobileBreakpoint: 1024,
     },
 
