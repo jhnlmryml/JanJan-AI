@@ -18,12 +18,12 @@ export default function Sidebar() {
     const isCollapsedMode = isCollapsed && !isMobileOpen;
 
     const handleNewChatClick = useCallback(() => {
-        if (!hasActiveMessages) return; // Prevent creating duplicate empty sessions
+        if (!hasActiveMessages) return;
         createNewChat();
         if (isMobileOpen) closeMobile();
     }, [hasActiveMessages, createNewChat, isMobileOpen, closeMobile]);
 
-    // Keyboard Shortcuts (⌘K & ⌘N)
+    // Hotkey Support: ⌘K for Search, ⌘N for New Chat
     useEffect(() => {
         const handleHotkeys = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -64,15 +64,15 @@ export default function Sidebar() {
                     {!isCollapsedMode && (
                         <div className="flex items-center gap-2.5 min-w-0 pl-1">
                             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30">
-                                <Sparkles className="h-4 w-4"/>
+                                <Sparkles className="h-4 w-4" />
                             </div>
                             <div className="flex flex-col min-w-0 overflow-hidden">
-                                    <span className="font-bold text-sm tracking-tight text-slate-100 truncate">
-                                        {APP.name}
-                                    </span>
+                                <span className="font-bold text-sm tracking-tight text-slate-100 truncate">
+                                    {APP.name}
+                                </span>
                                 <span className="text-[10px] text-blue-400 font-medium truncate">
-                                        {APP.tagline}
-                                    </span>
+                                    {APP.tagline}
+                                </span>
                             </div>
                         </div>
                     )}
@@ -87,7 +87,7 @@ export default function Sidebar() {
                     </button>
                 </div>
 
-                {/* Dynamic New Chat Button */}
+                {/* New Chat Button */}
                 <div className="px-3 pb-2 shrink-0">
                     <button
                         type="button"

@@ -122,26 +122,26 @@ export function groupSessionsByDate(sessions: ChatSession[]): GroupedChats[] {
         .filter((item) => item.chats.length > 0);
 }
 
-/**
- * Generates an automated title snippet from initial user text message
- */
-export function generateChatTitleFromMessages(messages: UIMessage[]): string | null {
-    const firstUserMsg = messages.find((m) => m.role === "user");
-    if (!firstUserMsg) return null;
-
-    let text = "";
-    if (Array.isArray(firstUserMsg.parts)) {
-        text = firstUserMsg.parts
-            .filter((p) => p.type === "text")
-            .map((p) => p.text)
-            .join(" ");
-    } else if (typeof (firstUserMsg as any).content === "string") {
-        text = (firstUserMsg as any).content;
-    }
-
-    const trimmed = text.trim();
-    if (!trimmed) return null;
-
-    const clean = trimmed.replace(/[\r\n]+/g, " ");
-    return clean.length > 32 ? `${clean.substring(0, 32)}...` : clean;
-}
+// /**
+//  * Generates an automated title snippet from initial user text message
+//  */
+// export function generateChatTitleFromMessages(messages: UIMessage[]): string | null {
+//     const firstUserMsg = messages.find((m) => m.role === "user");
+//     if (!firstUserMsg) return null;
+//
+//     let text = "";
+//     if (Array.isArray(firstUserMsg.parts)) {
+//         text = firstUserMsg.parts
+//             .filter((p) => p.type === "text")
+//             .map((p) => p.text)
+//             .join(" ");
+//     } else if (typeof (firstUserMsg as any).content === "string") {
+//         text = (firstUserMsg as any).content;
+//     }
+//
+//     const trimmed = text.trim();
+//     if (!trimmed) return null;
+//
+//     const clean = trimmed.replace(/[\r\n]+/g, " ");
+//     return clean.length > 32 ? `${clean.substring(0, 32)}...` : clean;
+// }

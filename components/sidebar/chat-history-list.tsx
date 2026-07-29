@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { MessageSquare, Trash2, Edit3, Sparkles, Check, X } from "lucide-react";
+import {MessageSquare, Trash2, Edit3, Check, X, Sparkles} from "lucide-react";
 import { useChatStore, ChatSession } from "@/context/chat-context";
 
 type Props = {
@@ -15,12 +15,17 @@ export default function ChatHistoryList({ searchQuery, isCollapsed }: Props) {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editTitle, setEditTitle] = useState("");
 
+    // Only consider sessions with messages as actual history
+    const historyChats = useMemo(() => {
+        return chats.filter((chat) => chat.messages && chat.messages.length > 0);
+    }, [chats]);
+
     const filtered = useMemo(() => {
-        if (!searchQuery.trim()) return chats;
-        return chats.filter((chat) =>
+        if (!searchQuery.trim()) return historyChats;
+        return historyChats.filter((chat) =>
             chat.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
-    }, [chats, searchQuery]);
+    }, [historyChats, searchQuery]);
 
     const handleStartEdit = (e: React.MouseEvent, chat: ChatSession) => {
         e.stopPropagation();
@@ -42,20 +47,20 @@ export default function ChatHistoryList({ searchQuery, isCollapsed }: Props) {
         setEditingId(null);
     };
 
-    // Catchy Non-Button Label Empty State
-    if (chats.length === 0) {
+    // When there is no chat history at all, display ONLY the plain text label
+    if (historyChats.length === 0) {
         if (isCollapsed) return null;
 
         return (
             <div className="flex-1 flex flex-col items-center justify-center p-4 text-center">
                 <div className="relative mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-inner">
-                    <Sparkles className="h-5 w-5" />
+                    <Sparkles className="h-5 w-5"/>
                 </div>
                 <p className="text-xs font-semibold text-slate-200 tracking-wide mb-1">
                     Spark a Conversation
                 </p>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 px-3 py-1 text-[11px] font-medium text-blue-300 select-none">
-                    <Sparkles className="h-3 w-3" />
+                    <Sparkles className="h-3 w-3"/>
                     <span>Start a chat</span>
                 </span>
             </div>
@@ -72,8 +77,10 @@ export default function ChatHistoryList({ searchQuery, isCollapsed }: Props) {
                     <div
                         key={chat.id}
                         onClick={() => selectChat(chat.id)}
+                        title={isCollapsed ? chat.title : undefined}
                         className={`
-                            group relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium cursor-pointer transition-all duration-150
+                            group relative flex items-center gap-2.5 rounded-xl py-2 text-xs font-medium cursor-pointer transition-all duration-150
+                            ${isCollapsed ? "justify-center px-0 h-9" : "px-3"}
                             ${
                             isActive
                                 ? "bg-blue-600/15 text-blue-300 border border-blue-500/30 shadow-sm"

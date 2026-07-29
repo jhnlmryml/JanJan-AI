@@ -8,10 +8,10 @@ import {
 import { groq } from "@ai-sdk/groq";
 
 import {
-    AI_MAX_DURATION,
     AI_MODEL,
     AI_TEMPERATURE,
 } from "@/lib/ai/constants";
+
 import {
     ChatRequestSchema,
 } from "@/lib/ai/validation";
@@ -29,7 +29,7 @@ import {
 } from "@/lib/ai/system-prompt";
 
 export const runtime = "edge";
-export const maxDuration = AI_MAX_DURATION;
+export const maxDuration = 30;
 
 export async function POST(req: Request) {
     try {

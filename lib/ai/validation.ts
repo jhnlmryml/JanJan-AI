@@ -8,23 +8,13 @@ import {
     MAX_MESSAGE_ID_LENGTH,
 } from "./constants";
 
-/**
- * Supported message roles.
- *
- * We intentionally do NOT allow "system" because
- * only the server should provide the system prompt.
- */
+
 export const MessageRoleSchema = z.enum([
     "user",
     "assistant",
 ]);
 
-/**
- * AI SDK UIMessage validation.
- *
- * We keep `.passthrough()` so the AI SDK can include
- * additional fields without failing validation.
- */
+
 export const MessageSchema = z.looseObject({
     id: z
         .string()
