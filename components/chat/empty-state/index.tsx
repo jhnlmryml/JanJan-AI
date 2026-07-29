@@ -1,6 +1,5 @@
 
 import React from "react";
-import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
 import { APP } from "@/config/site";
@@ -26,12 +25,21 @@ export default function EmptyState() {
 
                     {/* Inner Glass Frame */}
                     <div className="glass-panel relative flex h-full w-full items-center justify-center rounded-[22px] p-4 sm:rounded-[34px] sm:p-5 bg-[#0a0a0f]/80">
-                        <Image
+                        {/*<Image*/}
+                        {/*    src={APP.logo}*/}
+                        {/*    alt={`${APP.name} logo`}*/}
+                        {/*    height={180}*/}
+                        {/*    width={180}*/}
+                        {/*    preload*/}
+                        {/*    className="h-auto w-full max-w-[92%] drop-shadow-[0_0_24px_rgba(59,130,246,0.5)] transition-transform duration-500 group-hover:scale-105"*/}
+                        {/*/>*/}
+                        <img
                             src={APP.logo}
                             alt={`${APP.name} logo`}
-                            height={180}
                             width={180}
-                            preload
+                            height={180}
+                            fetchPriority="high"
+                            decoding="async"
                             className="h-auto w-full max-w-[92%] drop-shadow-[0_0_24px_rgba(59,130,246,0.5)] transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
@@ -44,7 +52,7 @@ export default function EmptyState() {
 
                 {/* Description */}
                 <p className="mt-2 max-w-sm text-xs leading-relaxed text-slate-400 sm:text-sm max-sm:px-4">
-                    {APP.description}
+                {APP.description}
                 </p>
 
             </div>
