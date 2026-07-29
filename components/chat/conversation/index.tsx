@@ -1,5 +1,3 @@
-"use client";
-
 import type { ChatStatus, UIMessage } from "ai";
 
 import EmptyState from "@/components/chat/empty-state";

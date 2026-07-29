@@ -55,7 +55,6 @@ export default function Logo({
                 alt={`${APP.name} logo`}
                 width={current.image}
                 height={current.image}
-                priority
                 draggable={false}
                 className="
           select-none

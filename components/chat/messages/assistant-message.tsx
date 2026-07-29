@@ -51,7 +51,6 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                                 alt={`${APP.name} avatar`}
                                 width={20}
                                 height={20}
-                                preload
                                 className="h-4 w-4 object-contain sm:h-5 sm:w-5"
                             />
                         ) : (
