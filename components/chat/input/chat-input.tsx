@@ -2,7 +2,6 @@
 
 import type {
     KeyboardEvent,
-    MouseEvent,
 } from "react";
 
 import {

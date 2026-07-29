@@ -1,10 +1,7 @@
-"use client";
-
 import Chat from "@/components/chat/chat";
-import { useChatStore } from "@/context/chat-context";
 
 export default function ChatPage() {
-    const { activeChatId } = useChatStore();
+
 
     return (
         <main className="isolate relative flex h-[100dvh] w-full overflow-hidden bg-[#05070a]">
@@ -22,7 +19,7 @@ export default function ChatPage() {
 
             {/* Main Application Container */}
             <div className="relative z-10 flex h-full w-full flex-1 flex-col overflow-hidden">
-                <Chat key={activeChatId || "new_chat_session"} />
+                <Chat />
             </div>
         </main>
     );
