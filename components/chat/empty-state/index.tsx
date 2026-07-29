@@ -32,7 +32,6 @@ export default function EmptyState() {
                             alt={`${APP.name} logo`}
                             height={180}
                             width={180}
-                            priority
                             className="h-auto w-full max-w-[92%] drop-shadow-[0_0_24px_rgba(59,130,246,0.5)] transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
