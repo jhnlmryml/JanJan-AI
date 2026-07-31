@@ -25,8 +25,9 @@ export default function Conversation({
                 overflow-hidden
             "
         >
+            <div className="absolute inset-0 chat-wallpaper opacity-25 pointer-events-none"/>
             {isEmpty ? (
-                <EmptyState />
+                <EmptyState/>
             ) : (
                 <div
                     className="

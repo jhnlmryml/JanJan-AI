@@ -1,33 +1,17 @@
 "use client";
 
-import type {
-    KeyboardEvent,
-} from "react";
-
-import {
-    useState,
-    useEffect,
-    useRef,
-} from "react";
-
+import type { KeyboardEvent } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ChatStatus } from "ai";
-
-import {
-    ArrowUp,
-    Square,
-} from "lucide-react";
+import { ArrowUp, Square } from "lucide-react";
 
 import { Button } from "@/components/core/button";
-import {
-    PLACEHOLDERS,
-    SUGGESTIONS,
-} from "@/lib/ai/constants";
+import { PLACEHOLDERS, SUGGESTIONS } from "@/lib/ai/constants";
+import { APP } from "@/config/site";
 
 type ChatInputProps = {
     status: ChatStatus;
-    sendMessageAction: (
-        message: { text: string }
-    ) => void;
+    sendMessageAction: (message: { text: string }) => void;
     stopAction?: () => void;
     hasMessages?: boolean;
 };
@@ -39,56 +23,53 @@ export default function ChatInput({
                                       hasMessages = false,
                                   }: ChatInputProps) {
     const [input, setInput] = useState("");
-    const [placeholderIndex, setPlaceholderIndex] =
-        useState(0);
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
-    const textareaRef =
-        useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const isReady = status === "ready";
+    const isStreaming = status === "streaming" || status === "submitted";
+    const disabled = !isReady || input.trim().length === 0;
 
-    const isStreaming =
-        status === "streaming" ||
-        status === "submitted";
+    // -------------------------------------------------------------
+    // Auto-Focus Logic
+    // -------------------------------------------------------------
 
-    const disabled =
-        !isReady ||
-        input.trim().length === 0;
+    // 1. Focus on initial mount
+    useEffect(() => {
+        textareaRef.current?.focus();
+    }, []);
 
-    // Auto-grow textarea.
+    // 2. Re-focus when AI streaming finishes and becomes ready again
+    useEffect(() => {
+        if (isReady) {
+            textareaRef.current?.focus();
+        }
+    }, [isReady]);
+
+    // -------------------------------------------------------------
+    // Textarea Auto-Grow
+    // -------------------------------------------------------------
     useEffect(() => {
         const textarea = textareaRef.current;
-
         if (!textarea) return;
 
         textarea.style.height = "auto";
-
-        textarea.style.height = `${Math.min(
-            textarea.scrollHeight,
-            180
-        )}px`;
+        textarea.style.height = `${Math.min(textarea.scrollHeight, 180)}px`;
     }, [input]);
 
     const currentPlaceholder = hasMessages
-        ? "Ask Janjan anything..."
+        ? `Ask ${APP.name} anything...`
         : PLACEHOLDERS[placeholderIndex];
 
-    // Rotate placeholder text only when the
-    // conversation has not started.
+    // Rotate placeholder text only when conversation has not started
     useEffect(() => {
-        if (
-            hasMessages ||
-            input.length > 0
-        ) {
+        if (hasMessages || input.length > 0) {
             return;
         }
 
         const interval = setInterval(() => {
-            setPlaceholderIndex(
-                (previous) =>
-                    (previous + 1) %
-                    PLACEHOLDERS.length
-            );
+            setPlaceholderIndex((previous) => (previous + 1) % PLACEHOLDERS.length);
         }, 4000);
 
         return () => {
@@ -96,49 +77,31 @@ export default function ChatInput({
         };
     }, [hasMessages, input]);
 
-    function submit(
-        textToSubmit?: string
-    ) {
-        const text = (
-            textToSubmit ?? input
-        ).trim();
+    function submit(textToSubmit?: string) {
+        const text = (textToSubmit ?? input).trim();
 
         if (!text || !isReady) {
             return;
         }
 
         sendMessageAction({ text });
-
         setInput("");
 
         if (textareaRef.current) {
-            textareaRef.current.style.height =
-                "auto";
+            textareaRef.current.style.height = "auto";
+            // 3. Re-focus input after submitting
+            textareaRef.current.focus();
         }
     }
 
-    // function handleStop(
-    //     event?: MouseEvent | KeyboardEvent
-    // ) {
-    //     if (event) {
-    //         event.preventDefault();
-    //         event.stopPropagation();
-    //     }
-    //
-    //     stopAction?.();
-    // }
-
     function handleStop() {
         stopAction?.();
+        // Re-focus input when stop button is pressed
+        textareaRef.current?.focus();
     }
 
-    function handleKeyDown(
-        event: KeyboardEvent<HTMLTextAreaElement>
-    ) {
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
+    function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+        if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
 
             if (isStreaming) {
@@ -149,24 +112,14 @@ export default function ChatInput({
         }
     }
 
-    function handleSuggestionClick(
-        prompt: string
-    ) {
+    function handleSuggestionClick(prompt: string) {
         if (!isReady) return;
-
         submit(prompt);
     }
 
-    const isTyping =
-        input.trim().length > 0;
-
-    const shouldDisplaySuggestions =
-        !hasMessages && !isTyping;
-
-    const marqueeItems = [
-        ...SUGGESTIONS,
-        ...SUGGESTIONS,
-    ];
+    const isTyping = input.trim().length > 0;
+    const shouldDisplaySuggestions = !hasMessages && !isTyping;
+    const marqueeItems = [...SUGGESTIONS, ...SUGGESTIONS];
 
     return (
         <footer
@@ -230,66 +183,51 @@ export default function ChatInput({
                                     hover:[animation-play-state:paused]
                                 "
                             >
-                                {marqueeItems.map(
-                                    (
-                                        item,
-                                        index
-                                    ) => {
-                                        const Icon =
-                                            item.icon;
+                                {marqueeItems.map((item, index) => {
+                                    const Icon = item.icon;
 
-                                        return (
-                                            <button
-                                                key={index}
-                                                type="button"
-                                                onClick={() =>
-                                                    handleSuggestionClick(
-                                                        item.prompt
-                                                    )
-                                                }
+                                    return (
+                                        <button
+                                            key={index}
+                                            type="button"
+                                            onClick={() => handleSuggestionClick(item.prompt)}
+                                            className="
+                                                group
+                                                flex
+                                                shrink-0
+                                                items-center
+                                                gap-1.5
+                                                rounded-full
+                                                border
+                                                border-white/5
+                                                bg-white/[0.04]
+                                                px-3.5
+                                                py-1
+                                                text-xs
+                                                font-medium
+                                                text-slate-300
+                                                transition-all
+                                                duration-200
+                                                hover:border-blue-500/40
+                                                hover:bg-blue-500/10
+                                                hover:text-white
+                                                hover:shadow-[0_0_12px_rgba(59,130,246,0.2)]
+                                                active:scale-95
+                                            "
+                                        >
+                                            <Icon
                                                 className="
-                                                    group
-                                                    flex
-                                                    shrink-0
-                                                    items-center
-                                                    gap-1.5
-                                                    rounded-full
-                                                    border
-                                                    border-white/5
-                                                    bg-white/[0.04]
-                                                    px-3.5
-                                                    py-1
-                                                    text-xs
-                                                    font-medium
-                                                    text-slate-300
-                                                    transition-all
-                                                    duration-200
-                                                    hover:border-blue-500/40
-                                                    hover:bg-blue-500/10
-                                                    hover:text-white
-                                                    hover:shadow-[0_0_12px_rgba(59,130,246,0.2)]
-                                                    active:scale-95
+                                                    h-3.5
+                                                    w-3.5
+                                                    text-slate-400
+                                                    transition-colors
+                                                    group-hover:text-blue-400
                                                 "
-                                            >
-                                                <Icon
-                                                    className="
-                                                        h-3.5
-                                                        w-3.5
-                                                        text-slate-400
-                                                        transition-colors
-                                                        group-hover:text-blue-400
-                                                    "
-                                                />
-
-                                                <span>
-                                                    {
-                                                        item.label
-                                                    }
-                                                </span>
-                                            </button>
-                                        );
-                                    }
-                                )}
+                                            />
+                                            <span>{item.label}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -343,21 +281,10 @@ export default function ChatInput({
                             ref={textareaRef}
                             rows={1}
                             value={input}
-                            disabled={
-                                !isReady &&
-                                !isStreaming
-                            }
-                            placeholder={
-                                currentPlaceholder
-                            }
-                            onChange={(event) =>
-                                setInput(
-                                    event.target.value
-                                )
-                            }
-                            onKeyDown={
-                                handleKeyDown
-                            }
+                            disabled={!isReady && !isStreaming}
+                            placeholder={currentPlaceholder}
+                            onChange={(event) => setInput(event.target.value)}
+                            onKeyDown={handleKeyDown}
                             className="
                                 w-full
                                 resize-none
@@ -384,9 +311,7 @@ export default function ChatInput({
                         <Button
                             type="button"
                             size="icon"
-                            onClick={
-                                handleStop
-                            }
+                            onClick={handleStop}
                             aria-label="Stop generating"
                             className="
                                 h-8
@@ -446,19 +371,18 @@ export default function ChatInput({
                                 sm:rounded-2xl
                             "
                         >
-                            <ArrowUp
-                                className="h-4 w-4"
-                                strokeWidth={2.5}
-                            />
+                            <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
                         </Button>
                     )}
                 </form>
+
+                <p className="mt-2 text-center text-[10px] text-slate-500 sm:text-xs">
+                    {APP.name} AI can make mistakes. Verify important info.
+                </p>
             </div>
         </footer>
     );
 }
-
-
 
 // "use client";
 //

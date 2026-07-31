@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, memo, useCallback } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -20,11 +20,11 @@ type ExtraProps = {
     children?: React.ReactNode;
 };
 
-export default function AssistantMessage({ content }: AssistantMessageProps) {
+function AssistantMessage({ content }: AssistantMessageProps) {
     const [copiedText, setCopiedText] = useState<string | null>(null);
     const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
 
-    const handleCopy = async (text: string) => {
+    const handleCopy = useCallback(async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
             setCopiedText(text);
@@ -32,11 +32,11 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
         } catch (error) {
             console.error("Failed to copy text:", error);
         }
-    };
+    }, []);
 
-    const handleFeedback = (type: "like" | "dislike") => {
+    const handleFeedback = useCallback((type: "like" | "dislike") => {
         setFeedback((prev) => (prev === type ? null : type));
-    };
+    }, []);
 
     return (
         <div className="fade-up group relative flex w-full gap-3 py-3 sm:gap-4">
@@ -191,7 +191,7 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
                                     </td>
                                 );
                             },
-                            code({ inline, className, children, ...props }: ExtraProps & React.HTMLAttributes<HTMLElement>) {
+                            code({ inline, className, children, node, ...props }: ExtraProps & React.HTMLAttributes<HTMLElement> & { node?: unknown }) {
                                 const match = /language-(\w+)/.exec(className || "");
                                 const codeString = String(children).replace(/\n$/, "");
 
@@ -325,3 +325,5 @@ export default function AssistantMessage({ content }: AssistantMessageProps) {
         </div>
     );
 }
+
+export default memo(AssistantMessage, (prevProps, nextProps) => prevProps.content === nextProps.content);

@@ -11,7 +11,7 @@ export default function MobileHeader() {
     const { hasActiveMessages, createNewChat } = useChatStore();
 
     return (
-        <header className="relative flex h-14 w-full items-center justify-between border-b border-white/[0.08] bg-[#05070a]/90 px-4 backdrop-blur-xl lg:hidden shrink-0 z-20">
+        <header className="relative flex h-14 w-full items-center justify-between bg-[#05070a]/50 px-4 backdrop-blur-xl lg:hidden shrink-0 z-20">
             {/* Toggle Sidebar */}
             <button
                 type="button"

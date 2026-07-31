@@ -48,6 +48,15 @@ body {
   -ms-overflow-style: none;
   }
 
+
+.chat-wallpaper {
+  background-image: url('/arts-bg.svg');
+  background-repeat: repeat;
+  background-size: 500px 500px; /* Matched to 800px SVG pattern */
+  background-position: center;
+  will-change: transform;
+  }
+
 /* Force code blocks to use JetBrains Mono */
 code,
 pre,
